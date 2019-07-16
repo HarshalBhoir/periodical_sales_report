@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_periodical_sales">
+    <t t-call="report.external_layout">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="report.internal_layout">
+                <div class="page">
+                    <t t-if="(docs.date_from and docs.date_to)">
+                        <div class="row mt32 mb32">
+                            <div>
+                                <p class="text-center">
+                                    Sale order report from date <span t-esc="docs.date_from"/> to date <span t-esc="docs.date_to"/>
+                                </p>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-else="docs.period">
+                        <div class="row mt32 mb32">
+                            <div>
+                                <p class="text-center">
+                                    <t t-if="docs.period">Sale order report for
+                                        <span t-esc="dict(o._fields['period'].selection).get(o.period)"/><br/></t>
+                                </p>
+                            </div>
+                        </div>
+                    </t>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Quotation Number</th>
+                                <th class="text-left">Order Date</th>
+                                <th class="text-left">Customer</th>
+                                <th class="text-right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="orders" t-as="a">
+                                <td>
+                                    <span t-esc="a.name" />
+                                </td>
+                                <td class="text-left" style="white-space: text-nowrap;">
+                                    <span t-esc="a.date_order" />
+                                </td>
+                                <td class="text-left" style="white-space: text-nowrap;">
+                                    <span t-esc="a.partner_id.name" />
+                                </td>
+                                <td class="text-right" style="white-space: text-nowrap;">
+                                    <span t-field="a.amount_total" t-options='{"widget": "monetary", "display_currency": a.company_id.currency_id}' />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right"><b>Total</b></td>
+                                <td class="text-right" style="white-space: text-nowrap;">
+                                    <b><span t-esc="total_sale" /></b>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>
